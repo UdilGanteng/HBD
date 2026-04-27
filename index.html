@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta name="color-scheme" content="light">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Untuk Kamu ❤️</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 15vh;
+    min-height: 100dvh;
+    background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #ffdde1, #ff758c);
+    background-size: 200% 200%;
+    animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+    0% {background-position: 0%}
+    50% {background-position: 100%}
+    100% {background-position: 0%}
+}
+
+.container {
+    width: 90%;
+    max-width: 450px;
+    text-align: center;
+    z-index: 2;
+}
+
+.page {
+    display: none;
+    animation: fade 1.2s ease;
+}
+
+.active {
+    display: block;
+}
+
+@keyframes fade {
+    from {opacity: 0; transform: translateY(20px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+h1 { font-size: 1.8rem; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
+h2 { font-size: 1.4rem; }
+p { font-size: 1.1rem; line-height: 1.5; }
+
+#formBox {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 30px 20px;
+    border-radius: 25px;
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+input {
+    width: 90%;
+    padding: 15px;
+    border-radius: 15px;
+    border: none;
+    font-size: 16px;
+    outline: none;
+    text-align: center;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+}
+
+button {
+    margin-top: 20px;
+    width: 70%;
+    padding: 15px;
+    border-radius: 50px;
+    border: none;
+    background: #ff4d6d;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+}
+
+button:hover {
+    background: #ff1a4a;
+    transform: scale(1.05);
+}
+
+button:disabled {
+    background: #ccc;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+.clue {
+    font-size: 13px;
+    margin-top: 15px;
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(0,0,0,0.1);
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+.shake { animation: shake 0.4s; }
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+}
+
+.input-error { border: 2px solid #ff0000; background-color: #fff0f0; }
+
+.heart {
+    position: fixed;
+    top: -20px;
+    font-size: 20px;
+    user-select: none;
+    pointer-events: none;
+    z-index: 1;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+}
+
+.text-box {
+    height: 180px;
+    overflow-y: auto;
+    padding: 20px;
+    margin: 20px 0;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    mask-image: linear-gradient(to bottom, transparent, white 20%, white 80%, transparent);
+}
+
+.text-box::-webkit-scrollbar { width: 4px; }
+.text-box::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 10px; }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <div id="page1" class="page active">
+        <div id="formBox">
+            <h1>Hi, I hope you know me</h1>
+            <p id="label">Masukin sandi dulu ya...</p>
+            <input type="password" id="password" placeholder="Sandi...">
+            <p class="clue">Clue: nama temenmu sekelas seng ikut PMR</p>
+            <button onclick="cek()">Masuk</button>
+        </div>
+    </div>
+
+    <div id="page2" class="page">
+        <h2>Aku mau bilang sesuatu...</h2>
+        <div class="text-box">
+            <p id="text"></p>
+        </div>
+        <div class="btn-box">
+            <button id="nextBtn" onclick="nextPage()" disabled>Tunggu sebentar...</button>
+        </div>
+    </div>
+
+    <div id="page3" class="page">
+        <div id="formBox">
+            <h1>Terakhir...</h1>
+            <p>Makasih udah baca semuanya ❤️</p>
+            <h2 style="color: #ff4d6d;">Aku sayang kamu.</h2>
+        </div>
+    </div>
+</div>
+
+<audio id="myLagu" loop>
+    <source src="lagu.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const sandiList = ["fanezha","nezha","fanesa","fanes","nejul","nesha","nesa"];
+const lagu = document.getElementById("myLagu");
+
+function cek() {
+    let input = document.getElementById("password").value.toLowerCase().replace(/\s/g, "");
+
+    if (sandiList.includes(input)) {
+        // Jalankan lagu setelah interaksi user
+        lagu.play().catch(e => console.log("Musik butuh interaksi klik"));
+        
+        document.getElementById("page1").classList.remove("active");
+        document.getElementById("page2").classList.add("active");
+
+        mulaiTyping();
+        startHearts();
+    } else {
+        document.getElementById("label").innerText = "Sandi salah, coba lagi!";
+        let form = document.getElementById("formBox");
+        let inputBox = document.getElementById("password");
+
+        form.classList.add("shake");
+        inputBox.classList.add("input-error");
+
+        setTimeout(() => {
+            form.classList.remove("shake");
+            inputBox.classList.remove("input-error");
+        }, 500);
+    }
+}
+
+document.getElementById("password").addEventListener("keypress", (e) => {
+    if (e.key === "Enter") cek();
+});
+
+let kalimat = [
+    "Aku ga jago ngomong langsung...",
+    "Tapi lewat ini aku pengen kamu tau...",
+    "Setiap hari sama kamu itu berarti banget...",
+    "Aku selalu bersyukur kenal kamu...",
+    "Dan kalau disuruh milih lagi...",
+    "Aku tetap pilih kamu ❤️"
+];
+
+let i = 0, j = 0;
+
+function mulaiTyping() {
+    document.getElementById("text").innerHTML = "";
+    ketik();
+}
+
+function ketik() {
+    if (i < kalimat.length) {
+        let teks = kalimat[i];
+        let textEl = document.getElementById("text");
+
+        if (j < teks.length) {
+            textEl.innerHTML += teks.charAt(j);
+            j++;
+            let box = document.querySelector(".text-box");
+            box.scrollTo({ top: box.scrollHeight, behavior: "smooth" });
+            setTimeout(ketik, 60);
+        } else {
+            textEl.innerHTML += "<br><br>";
+            i++;
+            j = 0;
+            setTimeout(ketik, 800);
+        }
+    } else {
+        let btn = document.getElementById("nextBtn");
+        btn.disabled = false;
+        btn.innerText = "Lanjut ❤️";
+    }
+}
+
+function nextPage() {
+    document.getElementById("page2").classList.remove("active");
+    document.getElementById("page3").classList.add("active");
+}
+
+function startHearts() {
+    setInterval(() => {
+        let heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML = "❤️";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = (Math.random() * 20 + 10) + "px";
+        heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
+        heart.style.opacity = Math.random();
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+    }, 400);
+}
+</script>
+
+</body>
+</html>
